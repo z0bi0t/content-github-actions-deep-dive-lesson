@@ -75,7 +75,7 @@ jobs:
           asset_name: source_code_with_libraries.zip
           asset_content_type: application/zip
   upload:
-      runs-on: ubuntu-lastest
+      runs-on: ubuntu-latest
       needs: build
       steps:
         - name: Download Artifact
