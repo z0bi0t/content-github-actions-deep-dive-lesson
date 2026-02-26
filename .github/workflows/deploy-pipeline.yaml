@@ -93,6 +93,9 @@ jobs:
   test:
     runs-on: ubuntu-latest
     needs: upload
+    strategy:
+      matrix:
+        input: ["hello", "hi"]    # Payloads to our test function
     steps:
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v6
