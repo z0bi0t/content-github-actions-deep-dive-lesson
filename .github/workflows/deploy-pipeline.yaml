@@ -44,3 +44,22 @@ jobs:
         with:
           name: zipped-bundle
           path: ${{ github.sha }}.zip
+  publish:
+    runs-on: ubuntu-latest
+    #needs: build
+    steps:
+      - name: Create Release
+        uses: actions/create-release@v1
+        env:
+          # No need to manage this special secret
+          # As a good security practice, you should grant the
+          # GITHUB_TOKEN the least required access.
+          # https://docs.github.com/en/actions/tutorials/authenticate-with-github_token
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: ${{ github.run_number }}
+          release_name: Release from ${{ github.run_number }}
+          body: New release for ${{ github.sha }}. Release notes on the documentattion site
+          draft: false
+          # prerelease needed for example for Alfa release
+          prerelease: false
