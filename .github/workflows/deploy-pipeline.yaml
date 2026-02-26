@@ -46,9 +46,10 @@ jobs:
           path: ${{ github.sha }}.zip
   publish:
     runs-on: ubuntu-latest
-    #needs: build
+    needs: build
     steps:
       - name: Create Release
+        id: create-release
         uses: actions/create-release@v1
         env:
           # No need to manage this special secret
@@ -59,7 +60,22 @@ jobs:
         with:
           tag_name: ${{ github.run_number }}
           release_name: Release from ${{ github.run_number }}
-          body: New release for ${{ github.sha }}. Release notes on the documentattion site
+          body: New release for ${{ github.sha }}. Release notes on the documentation site
           draft: false
           # prerelease needed for example for Alfa release
           prerelease: false
+      - name: Download Artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: zipped-bundle
+      - name: Upload Release Asset
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.create-release.outputs.upload_url }}
+          asset_path: ./${{ github.sha }}.zip
+          asset_name: source_code_with_libraries.zip
+          asset_content_type: application/zip
+          
+          
